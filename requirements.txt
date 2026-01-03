@@ -1,0 +1,14 @@
+streamlit
+requests
+PyYAML
+pandas
+matplotlib
+yfinance
+requests
+json
+yaml
+os
+time
+warnings
+ta
+mplfinance
