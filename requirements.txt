@@ -12,3 +12,5 @@ time
 warnings
 ta
 mplfinance
+fear-and-greed
+plotly
