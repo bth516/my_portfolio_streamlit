@@ -40,19 +40,30 @@ with top_l:
 with top_r:
     account_type = st.selectbox("계좌", ["종합계좌", "ISA계좌"], label_visibility="collapsed")
 
-
-# 설정 파일 로드
-config_file = st.secrets["config"] if account_type == "종합계좌" else st.secrets["config_isa"]
-
+#API불러오기 **SCRET을사용**
 try:
-    with open(config_file, encoding="utf-8") as f:
-        cfg = yaml.load(f, Loader=yaml.FullLoader)
-    APP_KEY, APP_SECRET = cfg["APP_KEY"], cfg["APP_SECRET"]
-    CANO, ACNT_PRDT_CD, URL_BASE = cfg["CANO"], cfg["ACNT_PRDT_CD"], cfg["URL_BASE"]
-except Exception as e:
-    st.error(f"설정 파일을 읽을 수 없습니다: {e}")
-    st.stop()
+    if account_type == "종합계좌":
+        APP_KEY = st.secrets["APP_KEY"]
+        APP_SECRET = st.secrets["APP_SECRET"]
+        CANO = st.secrets["CANO"]
+        ACNT_PRDT_CD = st.secrets["ACNT_PRDT_CD"]
+    else:  # ISA 계좌
+        APP_KEY = st.secrets["ISA_APP_KEY"]
+        APP_SECRET = st.secrets["ISA_APP_SECRET"]
+        CANO = st.secrets["ISA_CANO"]
+        ACNT_PRDT_CD = st.secrets["ISA_ACNT_PRDT_CD"]
+    
+    # 공통 항목
+    URL_BASE = st.secrets["URL_BASE"]
 
+except KeyError as e:
+    st.error(f"Streamlit Secrets 설정이 누락되었습니다: {e}")
+    st.info("Advanced Settings의 Secrets 항목에 해당 키가 등록되어 있는지 확인하세요.")
+    st.stop()
+except Exception as e:
+    st.error(f"설정 정보를 가져오는 중 오류가 발생했습니다: {e}")
+    st.stop()
+    
 # ========================
 # 유틸리티 및 보조지표 함수 (원복)
 # ========================
