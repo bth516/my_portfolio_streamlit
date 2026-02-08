@@ -40,8 +40,10 @@ with top_l:
 with top_r:
     account_type = st.selectbox("계좌", ["종합계좌", "ISA계좌"], label_visibility="collapsed")
 
+
 # 설정 파일 로드
-config_file = "config.yaml" if account_type == "종합계좌" else "config_isa.yaml"
+config_file = st.secrets["config"] if account_type == "종합계좌" else st.secrets["config_isa"]
+
 try:
     with open(config_file, encoding="utf-8") as f:
         cfg = yaml.load(f, Loader=yaml.FullLoader)
@@ -479,4 +481,5 @@ with ec2:
     new_dm = st.data_editor(dm_df, key="ed_dom", hide_index=True, use_container_width=True, num_rows="dynamic")
     if st.button("국내 설정 저장"):
         new_dm.to_csv(DOMESTIC_WEIGHT_FILE, index=False)
+
         st.success("국내 설정 저장 완료! (새로고침 시 반영)")
